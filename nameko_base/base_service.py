@@ -4,7 +4,7 @@ Module for the service base class
 import sys
 import json
 
-from . import registry
+import registry
 
 from nameko.web.handlers import HttpRequestHandler
 
@@ -58,7 +58,7 @@ class BaseService(object):
         registry_cls = registry.load_registry_cls(params.registry)
         cls.registry = registry_cls(cls, params.address)
 
-    @regist_http('GET', '/info', regist=True)
+    @regist_http('GET', '/info', regist=False)
     def service_info(self, _request):
         """
         Return the service information, and this function will be used as
