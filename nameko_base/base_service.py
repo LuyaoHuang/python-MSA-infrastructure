@@ -6,37 +6,7 @@ import json
 
 import registry
 
-from nameko.web.handlers import HttpRequestHandler
-
-class AutoregistHttpRequestHandler(HttpRequestHandler):
-    """
-    A http handler with auto service regist and deregist
-    """
-    def __init__(self, method, url, expected_exceptions=(),
-                 regist=False):
-        super(AutoregistHttpRequestHandler, self).__init__(method, url, expected_exceptions)
-        self.regist = regist
-        self.registry = None
-
-    def start(self):
-        super(AutoregistHttpRequestHandler, self).start()
-        if self.regist:
-            self.registry = self.container.service_cls.registry
-            if not self.registry:
-                LOGGER.info('Skip service regist')
-                return
-            self.registry.regist_url(self.url)
-
-    def stop(self):
-        if self.regist:
-            if not self.registry:
-                LOGGER.info('Skip service deregist')
-                return
-            self.registry.deregist()
-        super(AutoregistHttpRequestHandler, self).stop()
-
-
-regist_http = AutoregistHttpRequestHandler.decorator
+from extra_handler import regist_http
 
 
 class BaseService(object):
